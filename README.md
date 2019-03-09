@@ -5,7 +5,7 @@ Carrega arquivos de Cartão Banco do Brasil no formato .txt e separa despesas po
 ## Usage
 
 ```bash
-git clone git@github.com:caiofcm/carrega-bb-credit-txt.git
+git clone https://github.com/caiofcm/carrega-bb-credit-txt.git
 pip install .
 ```
 
@@ -32,4 +32,4 @@ pipenv install --dev
 ## Features
 
 - Separa despesas por nome
-- Separa por categorias (__to do__)
+- Separa por categorias (_to do_)
