@@ -1,11 +1,9 @@
 import re
-# import xml.etree.ElementTree as ET
 from locale import atof, setlocale, LC_NUMERIC
 
 #TODO: Estornos ?
 
-REGX = '^\s{7,}(\-?[\d\.,]+)\s{5,}([\d\.,]+)$' #Include Estornos #CHANGE CAREFUL CAN BREAK
-# REGX = '^\s{9,}([\d\.,]+)\s{5,}([\d\.,]+)$' #Exclude Estornos...
+REGX = '^\s{7,}(\-?[\d\.,]+)\s{5,}([\d\.,]+)$'
 
 def check_if_line_is_name(a):
 	isAllBlankTo10 = a[0:9] == '         '
@@ -20,7 +18,6 @@ def check_if_is_transaction_line(a):
 
 def check_is_transaction_line_rgx(a):
 	a = a.strip()
-	#c = re.match('^-?[A-Z]{2}\s+(\-?[\d\.,]+)\s{8}([\d\.,]+)$', a[47:])
 	if 'PGTO' in a:
 		return False
 	c = re.match(REGX, a[51:])
@@ -33,12 +30,10 @@ def num_string_br_to_float(s):
 def get_BRL_USD_values(a):
 	a = a.strip()
 	c = re.match(REGX, a[50:])
-	setlocale(LC_NUMERIC, 'Portuguese_Brazil.1252')
+	setlocale(LC_NUMERIC, 'pt_BR.utf8') #'Portuguese_Brazil.1252'
 	brl = float(atof(c.group(1)))
 	usd = float(atof(c.group(2)))
 	setlocale(LC_NUMERIC, '')
-	# brl = float(a[58:69].strip().replace(',', '.'))
-	# usd = float(a[70:].strip().replace(',', '.'))
 	return brl, usd
 
 def get_Taxa_line(a):
@@ -56,9 +51,7 @@ def is_transaction_with_saq_or_saques(a):
 	return t2 or t3 or t4 or t5
 
 def parse_text_file(fname):
-	foundName = False
 	names = []
-	first_vals = []
 	idxLineTaxa = 1e20
 	persons_transactions = []
 	with open(fname, 'rb') as f:
@@ -129,14 +122,14 @@ def calc_total_values(card_info):
 
 def format_print_number(num):
 	num_s = '{:.2f}'.format(num)
-	num_s = num_s.replace('.', ',')
+	# num_s = num_s.replace('.', ',')
 	return num_s
 
 def print_expenses(fname, use_comma=False):
 	trsctns = parse_text_file(fname)
 	f = format_print_number
 	calc_total_values(trsctns)
-	p_sum = 0.0
+	p_sum = 0.0; brl_sum = 0.0; usd_sum = 0.0
 	print('Dollar Exchange Rate \t= {}'.format(f(trsctns['dollar-rate'])))
 	for p in trsctns['transactions']:
 		print('-------------------------')
@@ -147,5 +140,9 @@ def print_expenses(fname, use_comma=False):
 		if 'total-saques' in p:
 			print('Total From Saques: {}'.format(f(p['total-saques'])))
 		p_sum += p['total']
+		brl_sum += p['brl-simple']
+		usd_sum += p['usd-simple']
 	print('-------------------------')
 	print('TOTAL SUM: {:.2f}'.format(p_sum))
+	print('TOTAL BRL: {:.2f}'.format(brl_sum))
+	print('TOTAL USD: {:.2f}'.format(usd_sum))

@@ -1,7 +1,7 @@
 # from __future__ import print_function, absolute_import
 
 import argparse
-from parse_bb_credit import print_expenses
+from carrega_bb_credit_txt import print_expenses
 
 description = """
 Parse BB Credit Cards .TXT file
