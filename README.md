@@ -32,4 +32,4 @@ pipenv install --dev
 ## Features
 
 - Separa despesas por nome
-- Separa por categorias (TODO)
+- Separa por categorias (__to do__)
