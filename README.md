@@ -4,14 +4,14 @@ Carrega arquivos de Cartão Banco do Brasil no formato .txt e separa despesas po
 
 ## Usage
 
-```python
+```bash
 git clone git@github.com:caiofcm/carrega-bb-credit-txt.git
 pip install .
 ```
 
 Acione como módulo para printar no console:
 
-```python
+```bash
 python -m carrega_bb_credit_txt.py ARQUIVO-BB.txt
 ```
 
