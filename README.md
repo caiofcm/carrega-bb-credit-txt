@@ -24,7 +24,7 @@ card_infos = carrega_bb_credit.parse_text_file(ARQUIVOPATH)
 
 ## Development
 
-```python
+```
 pip install pipenv
 pipenv install --dev
 ```
