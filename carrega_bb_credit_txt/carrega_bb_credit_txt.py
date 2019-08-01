@@ -29,12 +29,14 @@ def num_string_br_to_float(s):
 
 def get_BRL_USD_values(a):
 	a = a.strip()
+	text = a[10:50]
+	date = a[0:10]
 	c = re.match(REGX, a[50:])
 	setlocale(LC_NUMERIC, 'pt_BR.utf8') #'Portuguese_Brazil.1252'
 	brl = float(atof(c.group(1)))
 	usd = float(atof(c.group(2)))
 	setlocale(LC_NUMERIC, '')
-	return brl, usd
+	return brl, usd, text, date
 
 def get_Taxa_line(a):
 	return 'Taxa de' in a
@@ -44,7 +46,7 @@ def get_dollar_exchange_rate(a):
 	return float(a[Xpos + 4:Xpos + 4 + 6].replace(',', '.'))
 
 def is_transaction_with_saq_or_saques(a):
-	t2 = 'SAQUES' in a
+	t2 = 'SAQUE' in a
 	t3 = 'IOF DIAR ROT PF' in a
 	t4 = 'IOF DIAR SAQ PF ' in a
 	t5 = 'IOF ADIC SAQ PF ' in a
@@ -74,14 +76,15 @@ def parse_text_file(fname):
 						pass
 					name = a[12:].strip()
 					names.append(name)
-					d = {'name': name, 'brls': [], 'usds': []}
+					d = {'name': name, 'brls': [], 'usds': [], 'entries': []}
 					continue
 
 				if isNameLine == False:
 					if check_is_transaction_line_rgx(a):
-						brl, usd = get_BRL_USD_values(a)
+						brl, usd, text, date = get_BRL_USD_values(a)
 						d['brls'].append(brl)
 						d['usds'].append(usd)
+						d['entries'].append({'date': date, 'text': text, 'brl': brl, 'usd': usd})
 
 						# Special transaction to separate
 						if is_transaction_with_saq_or_saques(a):

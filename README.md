@@ -12,7 +12,7 @@ pip install .
 Acione como módulo para printar no console:
 
 ```bash
-python -m carrega_bb_credit_txt.py ARQUIVO-BB.txt
+python -m carrega_bb_credit_txt ARQUIVO-BB.txt
 ```
 
 Ou como package
